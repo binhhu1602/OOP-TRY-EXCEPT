@@ -1,24 +1,35 @@
 import 'exceptions.dart';
 
-// ===== MIXIN =====
-// Mixin cho phép "gắn thêm" tính năng vào nhiều class khác nhau
-// mà không cần kế thừa (dùng từ khóa `with`).
+// ==========================================
+// 2. MIXIN TRONG DART (TÁI SỬ DỤNG TÍNH NĂNG)
+// ==========================================
+// Mixin cho phép "gắn thêm" (mix-in) chức năng vào nhiều class khác nhau
+// mà không cần quan hệ cha - con (kế thừa), sử dụng từ khóa `with`.
 
-/// Tự động ghi log. Class nào `with LoggerMixin` đều có hàm log().
+/// Mixin 1: Tự động ghi nhật ký (Log)
+/// Bất kỳ class nào dùng `with LoggerMixin` đều sở hữu hàm log()
 mixin LoggerMixin {
-  // Danh sách log dùng chung để giao diện hiển thị.
+  // Bộ nhớ tạm lưu lại các dòng log để hiển thị trực tiếp lên giao diện
   static final List<String> logs = [];
 
   void log(String message) {
-    final time = DateTime.now().toIso8601String().substring(11, 19);
+    final now = DateTime.now();
+    final time =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
     final line = '[$time] [$runtimeType] $message';
     logs.insert(0, line);
+    // In ra cửa sổ debug console
     // ignore: avoid_print
     print(line);
   }
+
+  static void clearLogs() {
+    logs.clear();
+  }
 }
 
-/// Các hàm kiểm tra tính hợp lệ, ném ValidationException nếu sai.
+/// Mixin 2: Kiểm tra tính hợp lệ của dữ liệu (Validation)
+/// Ném ngoại lệ ValidationException nếu dữ liệu không đạt yêu cầu
 mixin ValidatorMixin {
   void requireNotEmpty(String value, String fieldName) {
     if (value.trim().isEmpty) {
@@ -32,3 +43,4 @@ mixin ValidatorMixin {
     }
   }
 }
+

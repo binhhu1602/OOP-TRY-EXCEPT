@@ -1,9 +1,12 @@
-// ===== CUSTOM EXCEPTION =====
-// Lớp lỗi gốc của ứng dụng. Mọi lỗi "có chủ đích" đều kế thừa từ đây,
-// mỗi lỗi mang theo một thông báo thân thiện để hiển thị cho người dùng.
+// ==========================================
+// 1. ĐỊNH NGHĨA LỖI TÙY BIẾN (CUSTOM EXCEPTION)
+// ==========================================
+
+/// Lớp lỗi cơ sở của ứng dụng (Base Exception).
+/// Mọi lỗi nghiệp vụ đều kế thừa từ đây để có thông báo thân thiện cho người dùng.
 class AppException implements Exception {
-  final String message; // Thông báo cho người dùng
-  final String? details; // Chi tiết kỹ thuật (dành cho log)
+  final String message; // Thông báo thân thiện để hiển thị lên màn hình
+  final String? details; // Chi tiết kỹ thuật dành cho lập trình viên/log
 
   const AppException(this.message, {this.details});
 
@@ -11,17 +14,18 @@ class AppException implements Exception {
   String toString() => '$runtimeType: $message${details != null ? ' ($details)' : ''}';
 }
 
-/// Dữ liệu nhập vào không hợp lệ (tên trống, giá âm...).
+/// Lỗi 1: Dữ liệu nhập vào không hợp lệ (tên trống, giá âm, không phải là số...)
 class ValidationException extends AppException {
   const ValidationException(super.message, {super.details});
 }
 
-/// Dữ liệu JSON/Map sai định dạng, thiếu trường.
+/// Lỗi 2: Dữ liệu JSON / Map bị sai định dạng hoặc thiếu trường bắt buộc
 class ParseException extends AppException {
   const ParseException(super.message, {super.details});
 }
 
-/// Không tìm thấy dữ liệu.
+/// Lỗi 3: Không tìm thấy đối tượng trong danh sách theo ID
 class NotFoundException extends AppException {
   const NotFoundException(super.message, {super.details});
 }
+
